@@ -1,4 +1,4 @@
-# vibe-learning (video-to-note)
+# vibe-learning
 
 > Turn YouTube videos into interactive knowledge maps — watch smarter, retain more.
 
