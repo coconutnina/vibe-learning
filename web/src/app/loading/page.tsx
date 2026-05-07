@@ -433,7 +433,7 @@ function LoadingClient() {
           className="lp-anim-1 flex cursor-pointer items-center gap-2.5 text-inherit no-underline"
         >
           <LogoMark />
-          <span className="font-serif text-[17px] font-medium tracking-[-0.01em]">video-to-note</span>
+          <span className="font-serif text-[17px] font-medium tracking-[-0.01em]">vibe-learning</span>
         </a>
         <div className="lp-anim-2 max-w-[400px] truncate font-serif text-[13px] font-normal text-[#444444]">
           {titleState === "loading" ? "Loading..." : titleState === "success" ? videoTitle : ""}
@@ -560,7 +560,7 @@ function LoadingClient() {
           </span>
         </div>
         <a
-          href="https://github.com/coconutnina/video-to-note"
+          href="https://github.com/coconutnina/vibe-learning"
           target="_blank"
           rel="noopener noreferrer"
           className="pointer-events-auto absolute right-[72px] flex items-center text-[var(--faint)] transition-colors duration-150 hover:text-[var(--ink)]"

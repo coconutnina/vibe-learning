@@ -667,7 +667,7 @@ function WorkspaceClient() {
                 className="text-[16px] font-medium text-[#111111] group-hover:text-[#111111]"
                 style={{ fontFamily: '"EB Garamond", serif' }}
               >
-                video-to-note
+                vibe-learning
               </span>
             </Link>
             <span className="mx-1 h-[18px] w-px bg-[rgba(0,0,0,0.08)]" />

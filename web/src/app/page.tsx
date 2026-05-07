@@ -236,7 +236,7 @@ export default function HomePage() {
         <div className="flex items-center gap-2.5">
           <LogoMark />
           <span className="font-serif text-[17px] font-medium tracking-[-0.01em] text-[#111111]">
-            video-to-note
+            vibe-learning
           </span>
         </div>
 
@@ -302,9 +302,8 @@ export default function HomePage() {
           </div>
 
           <div className="hp-anim-title mb-[18px] flex items-center justify-center gap-5 text-center font-serif text-[76px] font-medium leading-none tracking-[-0.03em] text-[#111111]">
-            <span>video</span>
-            <span className="text-[68px] font-normal italic text-[#A8882A]">to</span>
-            <span>note</span>
+            <span className="text-[68px] font-light italic text-[#A8882A]">vibe</span>
+            <span>learning</span>
           </div>
 
           <p className="hp-anim-sub mb-[52px] max-w-[440px] text-center text-[14px] font-light leading-[1.85] text-[#555555]">
@@ -399,7 +398,7 @@ export default function HomePage() {
           </span>
         </div>
         <a
-          href="https://github.com/coconutnina/video-to-note"
+          href="https://github.com/coconutnina/vibe-learning"
           target="_blank"
           rel="noopener noreferrer"
           className="pointer-events-auto absolute right-[72px] flex items-center text-[#999999] transition-colors hover:text-[#111111]"

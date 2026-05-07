@@ -23,7 +23,7 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "video-to-note",
+  title: "vibe-learning",
   description:
     "粘贴 YouTube 链接，生成交互式思维导图与双语字幕。",
 };

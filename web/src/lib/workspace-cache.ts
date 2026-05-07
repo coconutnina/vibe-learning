@@ -1,13 +1,14 @@
 import type { FlowEdge, FlowNode } from "@/lib/mindmap";
 
 /** 版本升级：清空 workspace:* 并移除旧版 flush 标记（仅执行一次） */
-const WORKSPACE_STORAGE_FLUSH_KEY = "video-to-note:workspace-storage-flush-v5";
+const WORKSPACE_STORAGE_FLUSH_KEY = "vibe-learning:workspace-storage-flush-v5";
 
 function flushLegacyWorkspaceStorageOnce(): void {
   if (typeof localStorage === "undefined") return;
   try {
     if (localStorage.getItem(WORKSPACE_STORAGE_FLUSH_KEY)) return;
     localStorage.removeItem("video-to-note:workspace-storage-flush-v4");
+    localStorage.removeItem("video-to-note:workspace-storage-flush-v5");
     Object.keys(localStorage)
       .filter((k) => k.startsWith("workspace:"))
       .forEach((k) => localStorage.removeItem(k));
