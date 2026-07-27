@@ -6,39 +6,70 @@ import {
 } from "@/lib/supabase-cache";
 
 const ERROR_MESSAGE = "无法获取字幕";
+const SUPADATA_URL = "https://api.supadata.ai/v1/youtube/transcript";
+const TIMEOUT_MS = 15000;
 
 type TranscriptItem = { text: string; start: number; duration: number };
 
-async function fetchTranscriptFromApi(videoId: string): Promise<TranscriptItem[]> {
-  const apiKey = process.env.TRANSCRIPT_API_KEY;
-  if (!apiKey) {
-    throw new Error("transcript_api_key_missing");
+async function fetchWithRetry(
+  url: string,
+  options: RequestInit,
+  retries = 3
+): Promise<Response> {
+  for (let attempt = 0; attempt < retries; attempt += 1) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
+    try {
+      return await fetch(url, {
+        ...options,
+        signal: controller.signal,
+      });
+    } catch (error) {
+      if (attempt === retries - 1) throw error;
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    } finally {
+      clearTimeout(timeout);
+    }
   }
 
-  const response = await fetch(
-    `https://transcriptapi.com/api/v2/youtube/transcript?video_url=${encodeURIComponent(videoId)}`,
+  throw new Error(ERROR_MESSAGE);
+}
+
+async function fetchTranscriptFromSupadata(
+  videoId: string
+): Promise<TranscriptItem[]> {
+  const apiKey = process.env.SUPADATA_API_KEY;
+  if (!apiKey) {
+    throw new Error("supadata_api_key_missing");
+  }
+
+  const response = await fetchWithRetry(
+    `${SUPADATA_URL}?videoId=${encodeURIComponent(videoId)}&lang=en`,
     {
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        "x-api-key": apiKey,
       },
     }
   );
 
   if (!response.ok) {
-    throw new Error(`transcript_api_error_${response.status}`);
+    throw new Error(`supadata_api_error_${response.status}`);
   }
 
   const data = (await response.json()) as {
-    transcript?: Array<{ text?: string; start?: number; duration?: number }>;
+    content?: Array<{ text?: string; offset?: number; duration?: number }>;
   };
 
-  return Array.isArray(data.transcript)
-    ? data.transcript.map((item) => ({
-        text: typeof item.text === "string" ? item.text : "",
-        start: typeof item.start === "number" ? item.start : 0,
-        duration: typeof item.duration === "number" ? item.duration : 0,
-      }))
-    : [];
+  if (!Array.isArray(data.content)) {
+    throw new Error("supadata_response_invalid");
+  }
+
+  return data.content.map((item) => ({
+    text: typeof item.text === "string" ? item.text : "",
+    start: typeof item.offset === "number" ? item.offset / 1000 : 0,
+    duration: typeof item.duration === "number" ? item.duration / 1000 : 0,
+  }));
 }
 
 function mergeTranscriptIntoSentences(
@@ -93,7 +124,7 @@ async function handleGetTranscript(videoIdRaw: string | undefined) {
   }
 
   try {
-    const content = await fetchTranscriptFromApi(videoId);
+    const content = await fetchTranscriptFromSupadata(videoId);
 
     if (!Array.isArray(content) || content.length === 0) {
       // 明确返回空数组，才是真的没有字幕
@@ -120,7 +151,7 @@ async function handleGetTranscript(videoIdRaw: string | undefined) {
     if (err instanceof Error && err.name === "AbortError") {
       return NextResponse.json({ error: "timeout" }, { status: 408 });
     }
-    console.error("youtube-transcript error:", err);
+    console.error("Supadata error:", err);
     const message = err instanceof Error ? err.message : ERROR_MESSAGE;
     return NextResponse.json({ error: message }, { status: 500 });
   }
