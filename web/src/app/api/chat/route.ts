@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const DEEPSEEK_URL = "https://api.deepseek.com/chat/completions";
+import {
+  DEEPSEEK_CHAT_MODEL,
+  DEEPSEEK_NON_THINKING,
+  DEEPSEEK_URL,
+} from "@/lib/deepseek-stream";
 const TAVILY_URL = "https://api.tavily.com/search";
 const MAX_HISTORY_ROUNDS = 10;
 
@@ -134,7 +138,8 @@ ${transcriptContext}`;
         Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
-        model: "deepseek-chat",
+        model: DEEPSEEK_CHAT_MODEL,
+        thinking: DEEPSEEK_NON_THINKING,
         messages,
         max_tokens: 1000,
       }),

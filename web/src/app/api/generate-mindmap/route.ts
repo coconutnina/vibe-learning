@@ -405,7 +405,6 @@ async function enrichDetails(
 
     try {
       const detailContent = await deepseekStreamCompletion(apiKey, {
-        model: "deepseek-chat",
         messages: [
           {
             role: "system",
@@ -553,7 +552,6 @@ ${JSON.stringify(targetPayload)}
       if (searchResultsText.trim()) {
         const prompt = `根据以下搜索结果，用2~3句中文介绍该人物的姓名、机构、职位和专业背景：\n${searchResultsText}`;
         const summary = await deepseekStreamCompletion(apiKey, {
-          model: "deepseek-chat",
           messages: [{ role: "user", content: prompt }],
           max_tokens: 300,
         });
@@ -638,7 +636,6 @@ export async function POST(request: NextRequest) {
         let content: string;
         try {
           content = await deepseekStreamCompletion(apiKey, {
-            model: "deepseek-chat",
             messages: [
               { role: "system", content: MINDMAP_SKELETON_PROMPT },
               {

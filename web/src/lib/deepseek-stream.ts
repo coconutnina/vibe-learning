@@ -1,6 +1,11 @@
 /** DeepSeek Chat Completions 流式响应（SSE）拼接为完整文本 */
 
-const DEEPSEEK_URL = "https://api.deepseek.com/chat/completions";
+export const DEEPSEEK_URL = "https://api.deepseek.com/chat/completions";
+
+/** 替代已退役的 deepseek-chat（非 thinking 模式） */
+export const DEEPSEEK_CHAT_MODEL = "deepseek-v4-flash";
+
+export const DEEPSEEK_NON_THINKING = { type: "disabled" as const };
 
 function tryAppendDelta(
   jsonStr: string,
@@ -83,6 +88,8 @@ export async function deepseekStreamCompletion(
       Authorization: `Bearer ${apiKey}`,
     },
     body: JSON.stringify({
+      model: DEEPSEEK_CHAT_MODEL,
+      thinking: DEEPSEEK_NON_THINKING,
       ...payload,
       stream: true,
     }),

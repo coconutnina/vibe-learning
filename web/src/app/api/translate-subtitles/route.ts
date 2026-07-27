@@ -38,7 +38,6 @@ async function translateBatch(
   let content: string;
   try {
     content = await deepseekStreamCompletion(apiKey, {
-      model: "deepseek-chat",
       messages: [
         { role: "system", content: systemPrompt },
         {
