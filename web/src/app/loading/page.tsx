@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import * as React from "react";
 
@@ -404,7 +405,7 @@ function LoadingClient() {
     return () => {
       controller.abort();
     };
-  }, [videoId, retryTick]);
+  }, [videoId, retryTick, supabase]);
 
   function handleRetry() {
     hasNavigatedRef.current = false;
@@ -428,13 +429,13 @@ function LoadingClient() {
       <div className="pointer-events-none absolute inset-0 opacity-[0.025] [background-image:repeating-linear-gradient(0deg,_#000_0px,_#000_1px,_transparent_1px,_transparent_56px),repeating-linear-gradient(90deg,_#000_0px,_#000_1px,_transparent_1px,_transparent_56px)]" />
 
       <nav className="relative z-[2] flex h-16 items-center justify-between border-b border-[var(--rule)] px-[72px]">
-        <a
+        <Link
           href="/"
           className="lp-anim-1 flex cursor-pointer items-center gap-2.5 text-inherit no-underline"
         >
           <LogoMark />
           <span className="font-serif text-[17px] font-medium tracking-[-0.01em]">vibe-learning</span>
-        </a>
+        </Link>
         <div className="lp-anim-2 max-w-[400px] truncate font-serif text-[13px] font-normal text-[#444444]">
           {titleState === "loading" ? "Loading..." : titleState === "success" ? videoTitle : ""}
         </div>

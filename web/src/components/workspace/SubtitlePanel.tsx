@@ -36,12 +36,8 @@ export interface SubtitlePanelProps {
   lines?: SubtitleLine[] | null;
   /** 字幕加载状态，用于严格判断「暂无字幕」展示 */
   transcriptStatus?: TranscriptStatus;
-  /** 是否正在加载字幕 */
-  loading?: boolean;
   /** 错误文案：字幕获取超时、网络错误等（no_subtitle 由 transcriptStatus 单独展示） */
   error?: string | null;
-  /** 加载状态下已等待的秒数，用于展示预估文案 */
-  elapsedSeconds?: number;
   onRowClick?: (timestamp: string, timestampSeconds?: number) => void;
   /** 点击字幕行跳转播放（秒） */
   onLineClick?: (seconds: number) => void;
@@ -64,9 +60,7 @@ export function SubtitlePanel({
   currentTimeSeconds,
   lines,
   transcriptStatus,
-  loading = false,
   error,
-  elapsedSeconds,
   onRowClick,
   onLineClick,
   hideModeToggle = false,

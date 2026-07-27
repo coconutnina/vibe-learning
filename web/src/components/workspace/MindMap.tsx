@@ -87,7 +87,6 @@ export interface MindMapProps {
 }
 
 function MindMapCanvas({
-  className,
   initialNodes,
   initialEdges,
   onNodeClick,

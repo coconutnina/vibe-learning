@@ -4,7 +4,6 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import * as React from "react";
 import * as Tooltip from "@radix-ui/react-tooltip";
-import { Maximize, Minimize } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -32,7 +31,6 @@ import {
   clearAllCachedTranslations,
   getCachedMindmap,
   getCachedTranslations,
-  isTranslationsComplete,
   setCachedMindmap,
   setCachedTranslations,
 } from "@/lib/workspace-cache";
@@ -122,7 +120,6 @@ function WorkspaceClient() {
   // 字幕加载状态：初始为 loading，只有 API 返回成功/失败后才改变，保证新视频加载时显示等待提示
   const [transcriptStatus, setTranscriptStatus] =
     React.useState<TranscriptStatus>("loading");
-  const [elapsed, setElapsed] = React.useState(0);
   const [transcriptError, setTranscriptError] = React.useState<string | null>(null);
   const [transcriptLines, setTranscriptLines] = React.useState<SubtitleLine[] | null>(null);
   /** key 为合并后字幕行下标（与 transcriptLines 一致） */
@@ -206,7 +203,6 @@ function WorkspaceClient() {
       translationsRef.current = {};
       setTranscriptError(null);
       setTranscriptStatus("loading");
-      setElapsed(0);
       setMindmapNodes(null);
       setMindmapEdges(null);
       setMindmapLoading(false);
@@ -214,7 +210,6 @@ function WorkspaceClient() {
       return;
     }
     setTranscriptStatus("loading");
-    setElapsed(0);
     setTranscriptError(null);
     setMindmapNodes(null);
     setMindmapEdges(null);
@@ -538,15 +533,6 @@ function WorkspaceClient() {
     }));
   }, [transcriptLines, translations]);
 
-  // 加载中时每秒更新 elapsed，用于字幕面板「已等待 N 秒」提示
-  React.useEffect(() => {
-    if (transcriptStatus !== "loading") return;
-    const timer = window.setInterval(() => {
-      setElapsed((e) => e + 1);
-    }, 1000);
-    return () => window.clearInterval(timer);
-  }, [transcriptStatus]);
-
   const updateVideoPosition = React.useCallback(() => {
     const wrapper = wrapperRef.current;
     const slot = mode === "nav" ? slotNavRef.current : slotFocusRef.current;
@@ -567,8 +553,6 @@ function WorkspaceClient() {
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, [updateVideoPosition]);
-
-  const toggleMode = () => setMode((m) => (m === "nav" ? "focus" : "nav"));
 
   React.useEffect(() => {
     const onFs = () => setIsFullscreen(!!document.fullscreenElement);
@@ -795,18 +779,11 @@ function WorkspaceClient() {
                 lines={renderedLines}
                 transcriptStatus={transcriptStatus}
                 onLineClick={(seconds) => videoPlayerRef.current?.seekTo(seconds)}
-                loading={
-                  transcriptStatus === "loading" ||
-                  (transcriptLines == null &&
-                    transcriptStatus !== "error" &&
-                    transcriptStatus !== "no_subtitle")
-                }
                 error={
                   transcriptStatus === "no_subtitle" || transcriptStatus === "error"
                     ? transcriptError
                     : null
                 }
-                elapsedSeconds={elapsed}
               />
             </div>
           </div>
@@ -972,18 +949,11 @@ function WorkspaceClient() {
               lines={renderedLines}
               transcriptStatus={transcriptStatus}
               onLineClick={(seconds) => videoPlayerRef.current?.seekTo(seconds)}
-              loading={
-                transcriptStatus === "loading" ||
-                (transcriptLines == null &&
-                  transcriptStatus !== "error" &&
-                  transcriptStatus !== "no_subtitle")
-              }
               error={
                 transcriptStatus === "no_subtitle" || transcriptStatus === "error"
                   ? transcriptError
                   : null
               }
-              elapsedSeconds={elapsed}
             />
           </div>
         </div>

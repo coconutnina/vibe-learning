@@ -194,8 +194,6 @@ function findRootNodes(nodes: FlowNode[], edges: FlowEdge[]): FlowNode[] {
 function formatNodeMarkdown(node: FlowNode): string {
   const depth = node.data.depth ?? 0;
   const label = node.data.label ?? "";
-  const ts = node.data.timestamp?.trim();
-  const te = node.data.endTimestamp?.trim();
   const detail = node.data.detail?.trim();
   const important = node.data.important;
 
