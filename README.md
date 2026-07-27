@@ -26,15 +26,15 @@ Built for content where you actually need to understand, not just skim — techn
 
 ```bash
 # Clone the repo
-git clone https://github.com/coconutnina/video-to-note.git
-cd video-to-note/web
+git clone https://github.com/coconutnina/vibe-learning.git
+cd vibe-learning/web
 
 # Install dependencies
 npm install
 
 # Set up environment variables
 cp .env.example .env.local
-# Fill in: DEEPSEEK_API_KEY, SUPABASE_URL, SUPABASE_ANON_KEY, YOUTUBE_API_KEY
+# Fill in the seven variables listed in .env.example
 
 # Run locally
 npm run dev
@@ -124,13 +124,13 @@ Private beta. Core loop is working; pre-public checklist:
 ## 本地运行
 
 ```bash
-git clone https://github.com/coconutnina/video-to-note.git
-cd video-to-note/web
+git clone https://github.com/coconutnina/vibe-learning.git
+cd vibe-learning/web
 
 npm install
 
 cp .env.example .env.local
-# 填入：DEEPSEEK_API_KEY, SUPABASE_URL, SUPABASE_ANON_KEY, YOUTUBE_API_KEY
+# 填入 .env.example 中列出的 7 个环境变量
 
 npm run dev
 ```
